@@ -7,7 +7,7 @@ var c = gutil.colors;
 var es = require('event-stream');
 var extend = require('xtend');
 var path = require('path');
-var spawn = require('child_process').spawn;
+var fork = require('child_process').fork;
 
 var server = require('karma').server;
 
@@ -65,10 +65,9 @@ var karmaPlugin = function(options) {
     gutil.log('Starting Karma server...');
 
     // Start the server
-    child = spawn(
-      'node',
+    child = fork(
+      path.join(__dirname, 'lib', 'background.js'),
       [
-        path.join(__dirname, 'lib', 'background.js'),
         JSON.stringify(options)
       ],
       {
